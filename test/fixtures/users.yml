@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  basesector_id: 
+  unionsector_id: 
+  name: MyString
+  sex: 1
+  password_digest: MyString
+  login: MyString
+  status: 1
+  phone: MyString
+  offer: MyString
+
+two:
+  basesector_id: 
+  unionsector_id: 
+  name: MyString
+  sex: 1
+  password_digest: MyString
+  login: MyString
+  status: 1
+  phone: MyString
+  offer: MyString

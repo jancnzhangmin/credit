@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  flowtemplate_id: 
+  wordval: 2019-02-12 13:44:12
+  isnull: 1
+  isnullsummary: MyString
+  datetype: 1
+  name: MyString
+  rank: 
+  showlable: 1
+
+two:
+  flowtemplate_id: 
+  wordval: 2019-02-12 13:44:12
+  isnull: 1
+  isnullsummary: MyString
+  datetype: 1
+  name: MyString
+  rank: 
+  showlable: 1

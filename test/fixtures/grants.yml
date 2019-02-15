@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user_id: 
+  flowtemplate_id: 
+  summary: MyString
+  status: 1
+  pendstatus: 1
+
+two:
+  user_id: 
+  flowtemplate_id: 
+  summary: MyString
+  status: 1
+  pendstatus: 1

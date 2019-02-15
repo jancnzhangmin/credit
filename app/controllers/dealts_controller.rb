@@ -1,0 +1,2 @@
+class DealtsController < ApplicationController
+end
