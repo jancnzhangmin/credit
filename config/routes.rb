@@ -3,4 +3,14 @@ Rails.application.routes.draw do
   root 'dealts#index'
   resources :dealts
   resources :clas
+  resources :unionsectors do
+    collection do
+      post 'get_user_list'
+    end
+  end
+  resources :users do
+    collection do
+      get 'checkuser'
+    end
+  end
 end

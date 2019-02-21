@@ -1,0 +1,230 @@
+<div class="alert alert-block alert-success" style="display:none;">
+  <button type="button" class="close" data-dismiss="alert">
+    <i class="icon-remove"></i>
+  </button>
+
+  <p>
+    <strong>
+      <i class="icon-ok"></i>
+    </strong>
+    保存成功
+  </p>
+
+</div>
+
+<%= form_with(model:user,local:true,id:'validation-form',:html => {:class=>'form-horizontal m-t',:multipart => true}) do |f| %>
+    <h3 class="header smaller lighter blue">
+用户
+      <small></small>
+    </h3>
+    <div class="form-group" id="unionsector">
+      <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 部门 </label>
+      <div class="col-sm-10">
+        <%= f.select :unionsector_id,Unionsector.all.map{|p| [p.name,p.id]},{include_blank:'请选择部门'},class:"col-xs-10 col-sm-8",id:'selectunion' %>
+      </div>
+    </div>
+
+  <div class="form-group" id="basesector">
+    <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 基社 </label>
+    <div class="col-sm-10">
+      <%= f.select :basesector_id,Basesector.all.map{|p| [p.name,p.id]},{include_blank:'请选择基社'},class:"col-xs-10 col-sm-8" %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 姓名 </label>
+    <div class="col-sm-10">
+      <%= f.text_field :name,class:"col-xs-10 col-sm-8" %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 性别 </label>
+    <div class="col-sm-10">
+      <table style="margin-top: -6px;">
+        <tr>
+          <td>
+            <div class="radio">
+              <label>
+                <%= f.radio_button :sex, '1', class:'ace' %>
+                <span class="lbl"> 男</span>
+              </label>
+            </div>
+          </td>
+          <td>
+            <div class="radio">
+              <label>
+                <%= f.radio_button :sex, '0', class:'ace' %>
+                <span class="lbl"> 女</span>
+              </label>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+
+
+  <div class="form-group">
+    <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 账号 </label>
+    <div class="col-sm-10">
+      <%= f.text_field :login,class:"col-xs-10 col-sm-8" %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 密码 </label>
+    <div class="col-sm-10">
+      <%= f.password_field :password,class:"col-xs-10 col-sm-8" %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 确认密码 </label>
+    <div class="col-sm-10">
+      <%= f.password_field :password_confirmation,class:"col-xs-10 col-sm-8" %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 手机 </label>
+    <div class="col-sm-10">
+      <%= f.text_field :phone,class:"col-xs-10 col-sm-8" %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 职务 </label>
+    <div class="col-sm-10">
+      <%= f.text_field :offer,class:"col-xs-10 col-sm-8" %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 状态 </label>
+    <div class="col-sm-10" style="margin-top: -6px;">
+      <div class="checkbox">
+        <label>
+          <%= f.check_box :status, class:'ace' %>
+          <span class="lbl"> 启用</span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <%= hidden_field_tag :callback,params[:callback] %>
+  <%= hidden_field_tag :selectid,params[:selectid] %>
+
+    <div class="clearfix form-actions">
+      <div class="col-md-offset-2 col-md-10">
+        <button type="submit" name="commit" value="保存" class="btn btn-info" data-disable-with="保存" id="submit">
+          <i class="icon-ok bigger-110"></i>
+          保存
+        </button>
+
+      </div>
+    </div>
+<% end %>
+
+<script>
+$(document).ready(function () {
+    (function ($) {
+        $.getUrlParam = function (name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return unescape(r[2]); return null;
+        }
+    })(jQuery);
+
+if($.getUrlParam('callback')){
+    if($.getUrlParam('callback') == 'unionsector'){
+        $('#basesector').hide();
+        if($.getUrlParam('selectid')){
+            $('#selectunion').val($.getUrlParam('selectid'));
+        }
+    }
+}
+
+    var checkloginurl = '../users/checkuser';
+    if(window.location.href.indexOf("edit") > -1){
+        checkloginurl = '../../users/checkuser';
+    }
+    jQuery.validator.addMethod("login",function(value,element,param){
+        var pattern = /^([0-9]*)+$/;
+        return this.optional(element) || (!pattern.test(value));
+    },"&nbsp;&nbsp;账号不能为纯数字");
+    $('#validation-form').validate({
+        errorElement: 'div',
+        errorClass: 'help-block',
+        focusInvalid: false,
+        rules: {
+            'user[unionsector_id]': {
+                required: true
+            },
+            'user[name]': {
+                required: true
+            },
+            'user[login]': {
+                required: true,
+                login: true,
+                remote:{
+                    url:checkloginurl,
+                    type:'get',
+                    dataType:"json"
+                }
+            },
+            'user[password]': {
+                required: true
+            },
+            'user[password_confirmation]': {
+                required: true,
+                equalTo: "#user_password"
+            }
+        },
+
+        messages: {
+            'user[unionsector_id]': {
+                required: "&nbsp;&nbsp;请选择部门"
+            },
+            'user[name]': {
+                required: "&nbsp;&nbsp;姓名不能为空"
+            },
+            'user[login]': {
+                required: "&nbsp;&nbsp;账号不能为空",
+                remote:'&nbsp;&nbsp;账号已存在'
+            },
+            'user[password]': {
+                required: "&nbsp;&nbsp;请输入密码"
+            },
+            'user[password_confirmation]': {
+                required: "&nbsp;&nbsp;请输入确认密码",
+                equalTo:'&nbsp;&nbsp;两次密码不一致'
+            }
+        },
+
+        invalidHandler: function (event, validator) { //display error alert on form submit
+            $('.alert-danger', $('.login-form')).show();
+        },
+
+        highlight: function (e) {
+            $(e).closest('.form-group').removeClass('has-info').addClass('has-error');
+        },
+
+        success: function (e) {
+            $(e).closest('.form-group').removeClass('has-error').addClass('has-info');
+            $(e).remove();
+        }
+    });
+
+    if(window.location.href.indexOf("edit") > -1){
+        $("#user_password").rules("remove");
+        $("#user_password_confirmation").rules("remove");
+        $("#user_login").rules("remove");
+        $("#user_password_confirmation").rules("add",{equalTo: "#user_password",messages:{equalTo:'&nbsp;&nbsp;两次密码不一致'}});
+        $('#user_login').attr("readonly",true);
+    }
+
+});
+
+</script>
