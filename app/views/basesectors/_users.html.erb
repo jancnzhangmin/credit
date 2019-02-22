@@ -1,0 +1,41 @@
+<div class="widget-body">
+  <div class="widget-main padding-8">
+    <div class="profile-feed">
+
+      <% @users.each do |user| %>
+        <div class="profile-activity clearfix">
+          <div>
+            <div class="col-md-6">
+              <% if user.sex == 1 || user.sex.to_s == '' %>
+              <h4 class="blue"><i class="fa fa-user-o"></i> <%= user.name %> </h4>
+                <% else %>
+                <h4 class="purple"><i class="fa fa-user-o"></i> <%= user.name %> </h4>
+                <% end %>
+            </div>
+
+            <div class="col-md-6 text-right">
+              <h5 class=""> <%= user.offer %> </h5>
+            </div>
+            <div class="time col-md-12">
+              <i class="fa fa-phone"></i>
+              <%= user.phone %>
+            </div>
+          </div>
+          <div class="tools action-buttons">
+            <a href=<%= edit_user_path(user) %> class="blue userclick">
+              <i class="icon-pencil bigger-125"></i>
+            </a>
+              <a data-confirm="确认删除?" data-method="delete" class="red" href=<%= user_path(user,callback:'basesector') %>>
+              <i class="icon-remove bigger-125"></i>
+            </a>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script>
+  '<% session[:callback]='basesector' %>'
+    '<% session[:selectid]=params[:selectid] %>'
+</script>

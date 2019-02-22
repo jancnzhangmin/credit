@@ -1,0 +1,3 @@
+var html = "<%= j(render('users',locals:  {object: @users}, remote: true)) %>";
+$('#userdiv').empty();
+$('#userdiv').append(html);

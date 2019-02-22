@@ -27,7 +27,7 @@
   <div class="form-group" id="basesector">
     <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 基社 </label>
     <div class="col-sm-10">
-      <%= f.select :basesector_id,Basesector.all.map{|p| [p.name,p.id]},{include_blank:'请选择基社'},class:"col-xs-10 col-sm-8" %>
+      <%= f.select :basesector_id,Basesector.all.map{|p| [p.name,p.id]},{include_blank:'请选择基社'},class:"col-xs-10 col-sm-8" ,id:'selectbasese'%>
     </div>
   </div>
 
@@ -142,6 +142,12 @@ if($.getUrlParam('callback')){
         $('#basesector').hide();
         if($.getUrlParam('selectid')){
             $('#selectunion').val($.getUrlParam('selectid'));
+        }
+    }
+    if ($.getUrlParam('callback') == 'basesector') {
+        $('#unionsector').hide();
+        if ($.getUrlParam('selectid')) {
+            $('#selectbasese').val($.getUrlParam('selectid'));
         }
     }
 }

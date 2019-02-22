@@ -1,7 +1,7 @@
 source 'https://gems.ruby-china.com'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.4.0'
+ruby '~> 2.4.0'
 
 gem "paperclip", "~> 6.1.0"
 gem 'font-awesome-rails'

@@ -1,0 +1,61 @@
+<div class="alert alert-block alert-success" style="display:none;">
+  <button type="button" class="close" data-dismiss="alert">
+    <i class="icon-remove"></i>
+  </button>
+
+  <p>
+    <strong>
+      <i class="icon-ok"></i>
+    </strong>
+    保存成功
+  </p>
+
+</div>
+
+<%= form_with(model:basesector,local:true,:html => {:class=>'form-horizontal m-t',:multipart => true}) do |f| %>
+    <h3 class="header smaller lighter blue">
+      基社
+      <small></small>
+    </h3>
+    <div class="form-group">
+      <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 基社名称 </label>
+      <div class="col-sm-10">
+        <%= f.text_field :name,class:"col-xs-10 col-sm-8" %>
+      </div>
+    </div>
+  <div class="form-group">
+    <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 电话 </label>
+    <div class="col-sm-10">
+      <%= f.text_field :tel,class:"col-xs-10 col-sm-8" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 描述 </label>
+    <div class="col-sm-10">
+      <%= f.text_area :summary,class:"col-xs-10 col-sm-8" %>
+    </div>
+  </div>
+
+    <div class="clearfix form-actions">
+      <div class="col-md-offset-2 col-md-10">
+        <button type="submit" name="commit" value="保存" class="btn btn-info" data-disable-with="保存" id="submit">
+          <i class="icon-ok bigger-110"></i>
+          保存
+        </button>
+
+      </div>
+    </div>
+<% end %>
+<script>
+    $(document).ready(function () {
+        $('a').each(function () {
+            if ($(this).attr('href') == '/basesectors') {
+                $(this.parentNode).attr('class', 'active');
+                if ($(this.parentNode.parentNode.parentNode).is('li')) {
+                    $(this.parentNode.parentNode.parentNode).attr('class', 'open');
+                    this.parentNode.parentNode.style.display = "block";
+                }
+            }
+        });
+    });
+</script>

@@ -1,0 +1,154 @@
+<%= render 'layerbegin' %>
+
+<style>
+  .select-backcolor{
+    background-color: #f4f9fd;
+  }
+</style>
+
+<div class="alert alert-block alert-danger" style="display:none;">
+  <button type="button" class="close" data-dismiss="alert">
+    <i class="icon-remove"></i>
+  </button>
+
+  <p>
+    <strong>
+      <i class="fa fa-close"></i>
+    </strong>
+    该部门下存在用户，无法删除！
+  </p>
+
+</div>
+
+<% if notice && notice =='1'  %>
+  <script>
+      $('.alert-danger').show();
+  </script>
+<% end %>
+
+<div class="page-content">
+  <div class="page-header">
+    <h1>
+      基社
+    </h1>
+  </div><!-- /.page-header -->
+
+  <div class="row">
+    <div class="col-xs-12">
+      <!-- PAGE CONTENT BEGINS -->
+      <div class="widget-box transparent col-lg-6">
+        <div class="widget-header widget-header-small">
+          <h4 class="blue smaller">
+            <i class="fa fa-bank orange"></i>
+          </h4>
+          <div class="widget-toolbar action-buttons">
+            <a href=<%= new_basesector_path %>>
+              <i class="icon-plus blue"></i>
+            </a>
+            &nbsp;&nbsp;
+          </div>
+        </div>
+
+        <div class="widget-body">
+          <div class="widget-main padding-8">
+            <div class="profile-feed">
+              <% @basesectors.each do |basesector| %>
+                <div class="profile-activity clearfix unioncla" value=<%= basesector.id %>>
+                  <div>
+                    <h4 class="blue"> <%= basesector.name %> </h4>
+                    <div class="time">
+                      <i class="fa fa-phone"></i>
+                      <%= basesector.tel %>
+                    </div>
+                    <div class="time">&nbsp;&nbsp;&nbsp;
+                      <%= basesector.summary %>
+                    </div>
+                  </div>
+                  <div class="tools action-buttons">
+                    <a href=<%= edit_basesector_path(basesector) %> class="blue">
+                      <i class="icon-pencil bigger-125"></i>
+                    </a>
+                    <a data-confirm="确认删除?" data-method="delete" class="red" href=<%= basesector_path(basesector) %>>
+                      <i class="icon-remove bigger-125"></i>
+                    </a>
+                  </div>
+                </div>
+              <% end %>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="widget-box transparent col-lg-6">
+        <div class="widget-header widget-header-small">
+          <h4 class="blue smaller">
+            <i class="fa fa-user blue"></i>
+          </h4>
+          <div class="widget-toolbar action-buttons">
+            <a id = 'newuser' href=<%= new_user_path(callback:'basesector') %>>
+              <i class="icon-plus blue"></i>
+            </a>
+          </div>
+        </div>
+        <input type="hidden" id="selectid">
+        <div id ='userdiv'>
+
+        </div>
+
+
+      </div>
+
+      <script>
+          $(document).ready(function () {
+              $('a').each(function () {
+                  if($(this).attr('href')== '/basesectors' )
+                  {
+                      $(this.parentNode).attr('class','active');
+                      if($(this.parentNode.parentNode.parentNode).is('li'))
+                      {
+                          $(this.parentNode.parentNode.parentNode).attr('class','open');
+                          this.parentNode.parentNode.style.display="block";
+                      }
+                  }
+              });
+              (function ($) {
+                  $.getUrlParam = function (name) {
+                      var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+                      var r = window.location.search.substr(1).match(reg);
+                      if (r != null) return unescape(r[2]); return null;
+                  }
+              })(jQuery);
+              var currentpart = 0;
+              if($.getUrlParam('selectid')){
+                  currentpart = $.getUrlParam('selectid');
+                  $('.unioncla').each(function () {
+                      if($(this).attr('value')==currentpart){
+                          $(this).addClass('select-backcolor');
+                      }
+                  });
+                  $.post("basesectors/get_user_list",
+                      {
+                          basesector_id:currentpart
+                      }
+                  );
+              }
+              $('.unioncla').click(function () {
+                  $('.unioncla').each(function () {
+                      $(this).removeClass('select-backcolor');
+                  });
+                  $(this).addClass('select-backcolor');
+                  currentpart = $(this).attr('value');
+                  $('#newuser').attr('href','users/new?callback=basesector&selectid='+currentpart);
+                  $.post("basesectors/get_user_list",
+                      {
+                          basesector_id:currentpart
+                      }
+                  );
+              });
+          });
+
+      </script>
+
+
+<%= render 'layerend' %>

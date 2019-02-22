@@ -1,9 +1,15 @@
 Rails.application.routes.draw do
+  get 'basesectors/index'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root 'dealts#index'
   resources :dealts
   resources :clas
   resources :unionsectors do
+    collection do
+      post 'get_user_list'
+    end
+  end
+  resources :basesectors do
     collection do
       post 'get_user_list'
     end
