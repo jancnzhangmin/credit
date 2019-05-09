@@ -10,6 +10,7 @@
       });
   </script>
 
+  <% url = request.path_parameters['controller'] %>
   <div class="navbar-container" id="navbar-container">
     <div class="navbar-header pull-left">
       <a href="#" class="navbar-brand">
@@ -46,7 +47,7 @@
 
 								<span class="user-info">
 									<small>欢迎光临</small>
-管理员
+<%= session[:username] %>
 								</span>
 
             <i class="icon-caret-down"></i>
@@ -54,7 +55,7 @@
 
           <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
             <li data-turbolinks="false">
-              <a href='#'>
+              <a href=<%= modpwds_path %>>
                 <i class="icon-cog"></i>
                 修改密码
               </a>
@@ -63,7 +64,7 @@
             <li class="divider"></li>
 
             <li>
-              <a href='#'>
+              <a href=<%= logout_logins_path %>>
                 <i class="icon-off"></i>
                 退出
               </a>
@@ -100,8 +101,11 @@
           </a>
         </li>
 
-
-        <li>
+<% if url.include?('clas') || url.include?('flowdefs') || url.include?('usergroups') %>
+        <li class="active">
+          <% else %>
+          <li>
+            <% end %>
           <a href="#" class="dropdown-toggle">
             <i class="icon-cog"></i>
             <span class="menu-text"> 系统 </span>
@@ -114,12 +118,27 @@
                 职能分类
               </a>
             </li>
+            <li data-turbolinks="false">
+              <a href=<%= flowdefs_path %>>
+                <i class="icon-double-angle-right"></i>
+                定义流程模板
+              </a>
+            </li>
+            <li data-turbolinks="false">
+              <a href=<%= usergroups_path %>>
+                <i class="icon-double-angle-right"></i>
+                权限
+              </a>
+            </li>
           </ul>
         </li>
-
-        <li>
+<% if url.include?('unionsectors') || url.include?('basesectors') || url.include?('users') %>
+        <li class="active">
+          <% else %>
+          <li>
+            <% end %>
           <a href="#" class="dropdown-toggle">
-            <i class="icon-cog"></i>
+            <i class="icon-sitemap"></i>
             <span class="menu-text"> 机构架构 </span>
             <b class="arrow icon-angle-down"></b>
           </a>
@@ -138,8 +157,31 @@
             </li>
           </ul>
         </li>
-
-
+<% if url.include?('flows') %>
+        <li class="active">
+          <% else %>
+        <li>
+          <% end %>
+          <a href="#" class="dropdown-toggle">
+            <i class="icon-exchange"></i>
+            <span class="menu-text"> 工作申报 </span>
+            <b class="arrow icon-angle-down"></b>
+          </a>
+          <ul class="submenu">
+            <li data-turbolinks="false">
+              <a href=<%= myflows_path %>>
+                <i class="icon-double-angle-right"></i>
+                待办工作
+              </a>
+            </li>
+            <li data-turbolinks="false">
+              <a href=<%= flows_path %>>
+                <i class="icon-double-angle-right"></i>
+                新建工作
+              </a>
+            </li>
+          </ul>
+        </li>
 
       </ul><!-- /.nav-list -->
 
@@ -148,6 +190,17 @@
       </div>
 
       <script type="text/javascript">
+          ace.demo.init();
+// if(!"ace" in window) {
+//     jQuery(function (a) {
+//         ace.handle_side_menu(jQuery);
+//         ace.enable_search_ahead(jQuery);
+//         ace.general_things(jQuery);
+//         ace.widget_boxes(jQuery);
+//         ace.widget_reload_handler(jQuery)
+//     });
+// }
+
           try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
       </script>
     </div>

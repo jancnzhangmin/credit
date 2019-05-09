@@ -10,14 +10,36 @@ class UsersController < ApplicationController
 
   def new
     @user = User.new
+    @usergroups = @user.usergroups
   end
 
   def edit
+    @usergroups = @user.usergroups
   end
 
   def create
     @user = User.new(user_params)
     @user.save
+    if params[:usergroups][0]
+      params[:usergroups][0].split(',').each do |userp|
+        usergroup = Usergroup.find(userp)
+        if usergroup
+          @user.usergroups << usergroup
+        end
+      end
+    end
+    if params[:userfeedadmins][0]
+      params[:userfeedadmins][0].split(',').each do |f|
+        cla = Cla.find(f)
+        @user.userfeedadmins.create(cla_id:cla.id)
+      end
+    end
+    if params[:userbusinadmins][0]
+      params[:userbusinadmins][0].split(',').each do |f|
+        cla = Cla.find(f)
+        @user.userbusinadmins.create(cla_id:cla.id)
+      end
+    end
     if params[:callback] == 'unionsector'
       if params[:selectid]
         redirect_to unionsectors_path(selectid:params[:selectid])
@@ -37,6 +59,29 @@ class UsersController < ApplicationController
 
   def update
     @user.update(user_params)
+    @user.usergroups.destroy_all
+    if params[:usergroups][0]
+      params[:usergroups][0].split(',').each do |userp|
+        usergroup = Usergroup.find(userp)
+        if usergroup
+          @user.usergroups << usergroup
+        end
+      end
+    end
+    @user.userfeedadmins.destroy_all
+    if params[:userfeedadmins][0]
+      params[:userfeedadmins][0].split(',').each do |f|
+        cla = Cla.find(f)
+        @user.userfeedadmins.create(cla_id:cla.id)
+      end
+    end
+    @user.userbusinadmins.destroy_all
+    if params[:userbusinadmins][0]
+      params[:userbusinadmins][0].split(',').each do |f|
+        cla = Cla.find(f)
+        @user.userbusinadmins.create(cla_id:cla.id)
+      end
+    end
     if params[:callback] == 'unionsector'
       selectid = @user.unionsector.id
       redirect_to unionsectors_path(selectid:selectid)
@@ -80,9 +125,29 @@ class UsersController < ApplicationController
     render json:status
   end
 
+  def checkauth
+    userfeedadmin = 0
+    userbusinadmin = 0
+    if params[:usergroups] != ''
+      params[:usergroups].each do |f|
+        usergroup = Usergroup.find(f)
+        auths = usergroup.auths.where('keyword = ?','feedadmin')
+        if auths.size > 0
+          userfeedadmin = 1
+        end
+        auths = usergroup.auths.where('keyword = ?','business')
+        if auths.size > 0
+          userbusinadmin = 1
+        end
+      end
+    end
+    render json: '{"userfeedadmin":'+userbusinadmin.to_s+',"userbusinadmin":'+userbusinadmin.to_s+'}'
+  end
+
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_user
+    check_auth
     @user = User.find(params[:id])
   end
 

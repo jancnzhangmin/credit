@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  flowdef_id: 
+  wordtypedef_id: 
+  name: MyString
+  isnull: 1
+  nullsummary: MyString
+
+two:
+  flowdef_id: 
+  wordtypedef_id: 
+  name: MyString
+  isnull: 1
+  nullsummary: MyString

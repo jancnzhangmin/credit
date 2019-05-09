@@ -13,16 +13,16 @@
 </div>
 
 <%= form_with(model:user,local:true,id:'validation-form',:html => {:class=>'form-horizontal m-t',:multipart => true}) do |f| %>
-    <h3 class="header smaller lighter blue">
-用户
-      <small></small>
-    </h3>
-    <div class="form-group" id="unionsector">
-      <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 部门 </label>
-      <div class="col-sm-10">
-        <%= f.select :unionsector_id,Unionsector.all.map{|p| [p.name,p.id]},{include_blank:'请选择部门'},class:"col-xs-10 col-sm-8",id:'selectunion' %>
-      </div>
+  <h3 class="header smaller lighter blue">
+    用户
+    <small></small>
+  </h3>
+  <div class="form-group" id="unionsector">
+    <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 部门 </label>
+    <div class="col-sm-10">
+      <%= f.select :unionsector_id,Unionsector.all.map{|p| [p.name,p.id]},{include_blank:'请选择部门'},class:"col-xs-10 col-sm-8",id:'selectunion' %>
     </div>
+  </div>
 
   <div class="form-group" id="basesector">
     <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 基社 </label>
@@ -113,124 +113,222 @@
     </div>
   </div>
 
+  <div class="form-group">
+    <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 权限 </label>
+    <div class="col-sm-10">
+      <div class="col-xs-10 col-sm-8" style="padding-left:0px;">
+        <select multiple="" class="width-100 chosen-select" id="usergroup-chosen" data-placeholder="请选择权限...">
+          <option value="">&nbsp;</option>
+          <% Usergroup.all.each do |usergroup| %>
+            <option value=<%= usergroup.id %>><%= usergroup.name %></option>
+          <% end %>
+        </select>
+      </div>
+    </div>
+    <%= hidden_field_tag 'usergroups[]' %>
+  </div>
+
+  <div class="form-group" id="userfeeddiv" style="display: none;">
+    <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 流程管理员 </label>
+    <div class="col-sm-10">
+      <div class="col-xs-10 col-sm-8" style="padding-left:0px;padding-right: 0px;">
+        <select multiple="" class="width-100 chosen-select" id="userfeed-chosen" data-placeholder="请选择管理范围...">
+          <option value="">&nbsp;</option>
+          <% Cla.all.each do |cla| %>
+            <option value=<%= cla.id %>><%= cla.name %></option>
+          <% end %>
+        </select>
+      </div>
+    </div>
+    <%= hidden_field_tag 'userfeedadmins[]' %>
+  </div>
+
+  <div class="form-group" id="userbusindiv" style="display: none;">
+    <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 部门流程审核 </label>
+    <div class="col-sm-10">
+      <div class="col-xs-10 col-sm-8" style="padding-left:0px;padding-right: 0px;">
+        <select multiple="" class="width-100 chosen-select" id="userbusin-chosen" data-placeholder="请选择流程权限...">
+          <option value="">&nbsp;</option>
+          <% Cla.all.each do |cla| %>
+            <option value=<%= cla.id %>><%= cla.name %></option>
+          <% end %>
+        </select>
+      </div>
+    </div>
+    <%= hidden_field_tag 'userbusinadmins[]' %>
+  </div>
+
   <%= hidden_field_tag :callback,params[:callback] %>
   <%= hidden_field_tag :selectid,params[:selectid] %>
 
-    <div class="clearfix form-actions">
-      <div class="col-md-offset-2 col-md-10">
-        <button type="submit" name="commit" value="保存" class="btn btn-info" data-disable-with="保存" id="submit">
-          <i class="icon-ok bigger-110"></i>
-          保存
-        </button>
 
-      </div>
+
+
+  <div class="clearfix form-actions">
+    <div class="col-md-offset-2 col-md-10">
+      <button type="submit" name="commit" value="保存" class="btn btn-info" data-disable-with="保存" id="submit">
+        <i class="icon-ok bigger-110"></i>
+        保存
+      </button>
     </div>
+  </div>
 <% end %>
 
 <script>
-$(document).ready(function () {
-    (function ($) {
-        $.getUrlParam = function (name) {
-            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
-            var r = window.location.search.substr(1).match(reg);
-            if (r != null) return unescape(r[2]); return null;
-        }
-    })(jQuery);
+    $(document).ready(function () {
+        $("#usergroup-chosen").chosen();
+        $("#userfeed-chosen").chosen({width: '100%'});
+        $("#userbusin-chosen").chosen({width: '100%'});
 
-if($.getUrlParam('callback')){
-    if($.getUrlParam('callback') == 'unionsector'){
-        $('#basesector').hide();
-        if($.getUrlParam('selectid')){
-            $('#selectunion').val($.getUrlParam('selectid'));
-        }
-    }
-    if ($.getUrlParam('callback') == 'basesector') {
-        $('#unionsector').hide();
-        if ($.getUrlParam('selectid')) {
-            $('#selectbasese').val($.getUrlParam('selectid'));
-        }
-    }
-}
+        var checkauth = function(){
+            $.ajax({
+                async: false,    //表示请求是否异步处理
+                type: "get",    //请求类型
+                url: "/users/checkauth",//请求的 URL地址
+                dataType: "json",//返回的数据类型
+                data: {
+                    usergroups: $("#usergroup-chosen").val()
+                },
+                success: function (data) {
+                    if(data.userfeedadmin == 1){
+                        $('#userfeeddiv').show();
+                    }else{
+                        $('#userfeeddiv').hide();
+                    }
+                    if(data.userbusinadmin == 1){
+                        $('#userbusindiv').show();
+                    }else{
+                        $('#userbusindiv').hide();
+                    }
+                },
+                error: function (data) {
 
-    var checkloginurl = '../users/checkuser';
-    if(window.location.href.indexOf("edit") > -1){
-        checkloginurl = '../../users/checkuser';
-    }
-    jQuery.validator.addMethod("login",function(value,element,param){
-        var pattern = /^([0-9]*)+$/;
-        return this.optional(element) || (!pattern.test(value));
-    },"&nbsp;&nbsp;账号不能为纯数字");
-    $('#validation-form').validate({
-        errorElement: 'div',
-        errorClass: 'help-block',
-        focusInvalid: false,
-        rules: {
-            'user[unionsector_id]': {
-                required: true
-            },
-            'user[name]': {
-                required: true
-            },
-            'user[login]': {
-                required: true,
-                login: true,
-                remote:{
-                    url:checkloginurl,
-                    type:'get',
-                    dataType:"json"
+                }
+            });
+        };
+
+        $('.chosen-select').on('change',function(e,params){
+            checkauth();
+        });
+        if('<%= @usergroups.size %>' > 0){
+            $('#usergroup-chosen').val(<%= @usergroups.ids %>);
+            $("#usergroup-chosen").trigger("chosen:updated");
+        }
+        $('#userfeed-chosen').val(<%= @user.userfeedadmins.map(&:cla_id) %>);
+        $("#userfeed-chosen").trigger("chosen:updated");
+
+        $('#userbusin-chosen').val(<%= @user.userbusinadmins.map(&:cla_id) %>);
+        $("#userbusin-chosen").trigger("chosen:updated");
+
+        checkauth();
+
+        $('#submit').click(function () {
+            $('#usergroups_').val($("#usergroup-chosen").val());
+            $('#userfeedadmins_').val($("#userfeed-chosen").val());
+            $('#userbusinadmins_').val($("#userbusin-chosen").val());
+        });
+        (function ($) {
+            $.getUrlParam = function (name) {
+                var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+                var r = window.location.search.substr(1).match(reg);
+                if (r != null) return unescape(r[2]); return null;
+            }
+        })(jQuery);
+
+        if($.getUrlParam('callback')){
+            if($.getUrlParam('callback') == 'unionsector'){
+                $('#basesector').hide();
+                if($.getUrlParam('selectid')){
+                    $('#selectunion').val($.getUrlParam('selectid'));
+                }
+            }
+            if ($.getUrlParam('callback') == 'basesector') {
+                $('#unionsector').hide();
+                if ($.getUrlParam('selectid')) {
+                    $('#selectbasese').val($.getUrlParam('selectid'));
+                }
+            }
+        }
+
+        var checkloginurl = '../users/checkuser';
+        if(window.location.href.indexOf("edit") > -1){
+            checkloginurl = '../../users/checkuser';
+        }
+        jQuery.validator.addMethod("login",function(value,element,param){
+            var pattern = /^([0-9]*)+$/;
+            return this.optional(element) || (!pattern.test(value));
+        },"&nbsp;&nbsp;账号不能为纯数字");
+        $('#validation-form').validate({
+            errorElement: 'div',
+            errorClass: 'help-block',
+            focusInvalid: false,
+            rules: {
+                'user[unionsector_id]': {
+                    required: true
+                },
+                'user[name]': {
+                    required: true
+                },
+                'user[login]': {
+                    required: true,
+                    login: true,
+                    remote:{
+                        url:checkloginurl,
+                        type:'get',
+                        dataType:"json"
+                    }
+                },
+                'user[password]': {
+                    required: true
+                },
+                'user[password_confirmation]': {
+                    required: true,
+                    equalTo: "#user_password"
                 }
             },
-            'user[password]': {
-                required: true
+
+            messages: {
+                'user[unionsector_id]': {
+                    required: "&nbsp;&nbsp;请选择部门"
+                },
+                'user[name]': {
+                    required: "&nbsp;&nbsp;姓名不能为空"
+                },
+                'user[login]': {
+                    required: "&nbsp;&nbsp;账号不能为空",
+                    remote:'&nbsp;&nbsp;账号已存在'
+                },
+                'user[password]': {
+                    required: "&nbsp;&nbsp;请输入密码"
+                },
+                'user[password_confirmation]': {
+                    required: "&nbsp;&nbsp;请输入确认密码",
+                    equalTo:'&nbsp;&nbsp;两次密码不一致'
+                }
             },
-            'user[password_confirmation]': {
-                required: true,
-                equalTo: "#user_password"
+
+            invalidHandler: function (event, validator) { //display error alert on form submit
+                $('.alert-danger', $('.login-form')).show();
+            },
+
+            highlight: function (e) {
+                $(e).closest('.form-group').removeClass('has-info').addClass('has-error');
+            },
+
+            success: function (e) {
+                $(e).closest('.form-group').removeClass('has-error').addClass('has-info');
+                $(e).remove();
             }
-        },
+        });
 
-        messages: {
-            'user[unionsector_id]': {
-                required: "&nbsp;&nbsp;请选择部门"
-            },
-            'user[name]': {
-                required: "&nbsp;&nbsp;姓名不能为空"
-            },
-            'user[login]': {
-                required: "&nbsp;&nbsp;账号不能为空",
-                remote:'&nbsp;&nbsp;账号已存在'
-            },
-            'user[password]': {
-                required: "&nbsp;&nbsp;请输入密码"
-            },
-            'user[password_confirmation]': {
-                required: "&nbsp;&nbsp;请输入确认密码",
-                equalTo:'&nbsp;&nbsp;两次密码不一致'
-            }
-        },
-
-        invalidHandler: function (event, validator) { //display error alert on form submit
-            $('.alert-danger', $('.login-form')).show();
-        },
-
-        highlight: function (e) {
-            $(e).closest('.form-group').removeClass('has-info').addClass('has-error');
-        },
-
-        success: function (e) {
-            $(e).closest('.form-group').removeClass('has-error').addClass('has-info');
-            $(e).remove();
+        if(window.location.pathname.indexOf("edit") > -1){
+            $("#user_password").rules("remove");
+            $("#user_password_confirmation").rules("remove");
+            $("#user_login").rules("remove");
+            $("#user_password_confirmation").rules("add",{equalTo: "#user_password",messages:{equalTo:'&nbsp;&nbsp;两次密码不一致'}});
+            $('#user_login').attr("readonly",true);
         }
+
     });
-
-    if(window.location.href.indexOf("edit") > -1){
-        $("#user_password").rules("remove");
-        $("#user_password_confirmation").rules("remove");
-        $("#user_login").rules("remove");
-        $("#user_password_confirmation").rules("add",{equalTo: "#user_password",messages:{equalTo:'&nbsp;&nbsp;两次密码不一致'}});
-        $('#user_login').attr("readonly",true);
-    }
-
-});
 
 </script>

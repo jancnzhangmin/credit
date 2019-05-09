@@ -1,0 +1,6 @@
+$('.alert').hide();
+if('<%= @status %>' == '1'){
+    $('.alert-success').show();
+}else{
+    $('.alert-danger').show();
+}

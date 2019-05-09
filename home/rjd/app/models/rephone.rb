@@ -1,0 +1,2 @@
+class Rephone < ApplicationRecord
+end

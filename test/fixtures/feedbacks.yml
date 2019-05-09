@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  flow_id: 
+  user_id: 
+  opinion: 1
+  summary: MyText
+
+two:
+  flow_id: 
+  user_id: 
+  opinion: 1
+  summary: MyText

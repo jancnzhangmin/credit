@@ -1,0 +1,234 @@
+<div class="alert alert-block alert-success" style="display:none;">
+  <button type="button" class="close" data-dismiss="alert">
+    <i class="icon-remove"></i>
+  </button>
+
+  <p>
+    <strong>
+      <i class="icon-ok"></i>
+    </strong>
+    保存成功
+  </p>
+
+</div>
+
+<%= form_with(model:usergroup,local:true,:html => {:class=>'form-horizontal m-t',:multipart => true}) do |f| %>
+  <h3 class="header smaller lighter blue">
+    管理员组
+    <small></small>
+  </h3>
+  <div class="form-group">
+    <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 组名称 </label>
+    <div class="col-sm-10">
+      <%= f.text_field :name,class:"col-xs-10 col-sm-8" %>
+    </div>
+  </div>
+
+  <hr/>
+
+
+
+  <div class="row">
+    <div class="col-xs-12">
+
+
+      <div class="col-xs-6 col-sm-2 pricing-box">
+        <div class="widget-box">
+          <div class="widget-header header-color-red">
+            <h5 class="bigger lighter">系统</h5>
+          </div>
+          <div class="widget-body">
+            <div class="widget-main">
+              <ul class="list-unstyled spaced2">
+
+                <li>
+                  <div class="checkbox">
+                    <label>
+                      <% has_auth = false %>
+                      <% if @auths %>
+                        <% count =  @auths.select{|n| n.keyword == 'admin'}.count %>
+                        <% if count > 0 %>
+                          <% has_auth = true %>
+                        <% end %>
+                      <% end %>
+                      <%= check_box_tag 'auths[]admin', '',has_auth,class:'ace' %>
+                      <span class="lbl"> <%= Auth.find_by_keyword('admin').name %></span>
+                    </label>
+                  </div>
+                </li>
+
+                <li>
+                  <div class="checkbox">
+                    <label>
+                      <% has_auth = false %>
+                      <% if @auths %>
+                        <% count =  @auths.select{|n| n.keyword == 'baseadmin'}.count %>
+                        <% if count > 0 %>
+                          <% has_auth = true %>
+                        <% end %>
+                      <% end %>
+                      <%= check_box_tag 'auths[]baseadmin', '',has_auth,class:'ace' %>
+                      <span class="lbl"> <%= Auth.find_by_keyword('baseadmin').name %></span>
+                    </label>
+                  </div>
+                </li>
+
+                <li>
+                  <div class="checkbox">
+                    <label>
+                      <% has_auth = false %>
+                      <% if @auths %>
+                        <% count =  @auths.select{|n| n.keyword == 'unionadmin'}.count %>
+                        <% if count > 0 %>
+                          <% has_auth = true %>
+                        <% end %>
+                      <% end %>
+                      <%= check_box_tag 'auths[]unionadmin', '',has_auth,class:'ace' %>
+                      <span class="lbl"> <%= Auth.find_by_keyword('unionadmin').name %></span>
+                    </label>
+                  </div>
+                </li>
+
+
+
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xs-6 col-sm-2 pricing-box">
+        <div class="widget-box">
+          <div class="widget-header header-color-orange">
+            <h5 class="bigger lighter">部门</h5>
+          </div>
+          <div class="widget-body">
+            <div class="widget-main">
+              <ul class="list-unstyled spaced2">
+
+                <li>
+                  <div class="checkbox">
+                    <label>
+                      <% has_auth = false %>
+                      <% if @auths %>
+                        <% count =  @auths.select{|n| n.keyword == 'partadmin'}.count %>
+                        <% if count > 0 %>
+                          <% has_auth = true %>
+                        <% end %>
+                      <% end %>
+                      <%= check_box_tag 'auths[]partadmin', '',has_auth,class:'ace' %>
+                      <span class="lbl"> <%= Auth.find_by_keyword('partadmin').name %></span>
+                    </label>
+                  </div>
+                </li>
+
+                <li>
+                  <div class="checkbox">
+                    <label>
+                      <% has_auth = false %>
+                      <% if @auths %>
+                        <% count =  @auths.select{|n| n.keyword == 'head'}.count %>
+                        <% if count > 0 %>
+                          <% has_auth = true %>
+                        <% end %>
+                      <% end %>
+                      <%= check_box_tag 'auths[]head', '',has_auth,class:'ace' %>
+                      <span class="lbl"> <%= Auth.find_by_keyword('head').name %></span>
+                    </label>
+                  </div>
+                </li>
+
+                <li>
+                  <div class="checkbox">
+                    <label>
+                      <% has_auth = false %>
+                      <% if @auths %>
+                        <% count =  @auths.select{|n| n.keyword == 'business'}.count %>
+                        <% if count > 0 %>
+                          <% has_auth = true %>
+                        <% end %>
+                      <% end %>
+                      <%= check_box_tag 'auths[]business', '',has_auth,class:'ace' %>
+                      <span class="lbl"> <%= Auth.find_by_keyword('business').name %></span>
+                    </label>
+                  </div>
+                </li>
+
+
+<!--                <li>-->
+<!--                  <div style="padding: 15px;"></div>-->
+<!--                </li>-->
+
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xs-6 col-sm-2 pricing-box">
+        <div class="widget-box">
+          <div class="widget-header header-color-green">
+            <h5 class="bigger lighter">流程</h5>
+          </div>
+          <div class="widget-body">
+            <div class="widget-main">
+              <ul class="list-unstyled spaced2">
+
+                <li>
+                  <div class="checkbox">
+                    <label>
+                      <% has_auth = false %>
+                      <% if @auths %>
+                        <% count =  @auths.select{|n| n.keyword == 'feedadmin'}.count %>
+                        <% if count > 0 %>
+                          <% has_auth = true %>
+                        <% end %>
+                      <% end %>
+                      <%= check_box_tag 'auths[]feedadmin', '',has_auth,class:'ace' %>
+                      <span class="lbl"> <%= Auth.find_by_keyword('feedadmin').name %></span>
+                    </label>
+                  </div>
+                </li>
+
+                <li>
+                  <div class="checkbox">
+                    <label>
+                      <% has_auth = false %>
+                      <% if @auths %>
+                        <% count =  @auths.select{|n| n.keyword == 'newwork'}.count %>
+                        <% if count > 0 %>
+                          <% has_auth = true %>
+                        <% end %>
+                      <% end %>
+                      <%= check_box_tag 'auths[]newwork', '',has_auth,class:'ace' %>
+                      <span class="lbl"> <%= Auth.find_by_keyword('newwork').name %></span>
+                    </label>
+                  </div>
+                </li>
+
+
+
+
+                <li>
+                  <div style="padding: 15px;"></div>
+                </li>
+
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="clearfix form-actions">
+    <div class="col-md-offset-2 col-md-10">
+      <button type="submit" name="commit" value="保存" class="btn btn-info" data-disable-with="保存" id="submit">
+        <i class="icon-ok bigger-110"></i>
+        保存
+      </button>
+
+    </div>
+  </div>
+<% end %>

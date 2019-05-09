@@ -1,6 +1,6 @@
 class Flowtemplate < ApplicationRecord
   has_many :grants
-  belongs_to :cla
+  belongs_to :cla,optional: true
   has_many :wordints
   has_many :wordcoins
   has_many :dropdowns

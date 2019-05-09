@@ -1,0 +1,2 @@
+module FlowtemplatesHelper
+end

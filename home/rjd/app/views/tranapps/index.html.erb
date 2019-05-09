@@ -1,0 +1,107 @@
+<%= render 'layerbegin' %>
+
+
+<style>
+    .btn-transparent {
+        background-color: transparent !important;
+        border-color: transparent;
+        color:#6fb3e0;
+    }
+</style>
+
+
+
+<div class="page-content">
+  <div class="page-header">
+    <h1>
+      用户交易账号申请
+    </h1>
+  </div><!-- /.page-header -->
+
+  <div class="row">
+    <div class="col-xs-12">
+      <!-- PAGE CONTENT BEGINS -->
+
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="table-responsive">
+            <table id="sample-table-1" class="table table-striped table-bordered table-hover">
+              <thead>
+              <tr>
+                <th class="text-center">姓名</th>
+                <th class="text-center">账号</th>
+                <th class="text-center">交易账号</th>
+                <th class="text-center">交易密码</th>
+                <th class="text-center">状态</th>
+                <th class="text-center">操作</th>
+
+
+
+              </tr>
+              </thead>
+
+              <tbody>
+              <% @tranapps.each do |tranapp| %>
+                  <tr>
+                    <td>
+                      <%= tranapp.user.name %>
+                    </td>
+                    <td>
+                      <%= tranapp.user.login %>
+                    </td>
+                    <td>
+                      <%= tranapp.user.tranaccount %>
+                    </td>
+                    <td>
+                      <%= tranapp.user.tranpassword %>
+                    </td>
+                    <td>
+                      <% if tranapp.status == 0 %>
+                      <span class="orange">待审核</span>
+                          <% elsif tranapp.status == 1 %>
+                      <span class="green">通过</span>
+                          <% else %>
+                      <span class="red">拒绝</span>
+                          <% end %>
+
+                    </td>
+                    <td>
+                      <% if tranapp.status == 0 %>
+                      <div class="visible-md visible-lg hidden-sm hidden-xs btn-group" data-turbolinks="false">
+                        <a class="btn btn-xs btn-warning" href=<%= trannew_tranapp_path(tranapp) %>>
+                          <i class="icon-edit bigger-120"></i>
+                          审核
+                        </a>
+                      </div>
+                          <% end %>
+                    </td>
+                  </tr>
+              <% end %>
+
+
+
+
+
+
+
+
+              </tbody>
+            </table>
+          </div><!-- /.table-responsive -->
+
+        </div><!-- /span -->
+      </div><!-- /row -->
+
+      <div data-turbolinks="false" class="text-center">
+        <%= will_paginate @users, renderer: BootstrapPagination::Rails %>
+      </div>
+
+
+
+    </div><!-- /.col -->
+  </div><!-- /.row -->
+</div><!-- /.page-content -->
+
+
+
+<% render 'layerend' %>

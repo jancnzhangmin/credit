@@ -1,0 +1,205 @@
+<%= render 'layerbegin' %>
+<div class="page-content" style="background: white;">
+
+
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="alert alert-block alert-success" style="display:none;">
+        <button type="button" class="close" data-dismiss="alert">
+          <i class="icon-remove"></i>
+        </button>
+
+        <p>
+          <strong>
+            <i class="icon-ok"></i>
+          </strong>
+          保存成功
+        </p>
+
+      </div>
+
+      <%= form_with(model:@flowdef,local:true,id:'validation-form',:html => {:class=>'form-horizontal m-t',:multipart => true}) do |f| %>
+        <h3 class="header smaller lighter blue">
+          定义流程
+          <small></small>
+        </h3>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 审批部门 </label>
+          <div class="col-sm-10">
+            <%= f.select :unionsector_id,Unionsector.all.map{|p| [p.name,p.id]},{include_blank:'请选择申批部门'},class:"col-xs-10 col-sm-8" %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 流程名称 </label>
+          <div class="col-sm-10">
+            <%= f.text_field :name,class:"col-xs-10 col-sm-8" %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label no-padding-right" for="form-field-1">  </label>
+          <div class="col-sm-10">
+            <div class="checkbox" style="padding-top: 0px;padding-left: 0px;">
+              <label>
+                <%= f.check_box :status,class:"ace" %>
+                <span class="lbl"> 启用</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 描述 </label>
+          <div class="col-sm-10">
+            <%= f.text_area :summary,class:"col-xs-10 col-sm-8" %>
+          </div>
+        </div>
+
+        <div class="hr hr32 hr-dotted"></div>
+
+        <div id="wordtypediv">
+
+          <!-- wordtypeform -->
+
+          <div class="col-sm-1"></div>
+          <div class="col-sm-10" style="background: white;">
+
+            <div>
+              <div class="widget-box transparent">
+                <div class="widget-header widget-header-small">
+                  <h4 class="blue smaller">
+                    <i class="fa fa-bars orange"></i>
+                    字段
+                  </h4>
+
+                  <div class="widget-toolbar action-buttons">
+
+                  </div>
+                </div>
+
+                <div class="widget-body" style="background: white;">
+                  <div class="widget-main padding-8">
+                    <div id="profile-feed-1" class="profile-feed">
+
+
+
+                      <%= f.fields_for :wordtypes do |wordtype| %>
+                        <div class="profile-activity clearfix">
+                          <%= wordtype.select :wordtypedef_id,Wordtypedef.all.map{|n| [n.wordtype,n.id]}, {include_blank: '字段类型'},{class:'col-md-2',style:'height:28px;'} %>
+                          <%= wordtype.text_field :name,class:'col-md-3',placeholder:'字段名称' %>
+                          <div class="checkbox col-md-2 text-right" style="padding-top: 0px;">
+                            <label>
+                              <%= wordtype.check_box :isnull,class:"ace" %>
+                              <span class="lbl"> 非空</span>
+                            </label>
+                          </div>
+                          <%= wordtype.text_field :nullsummary,placeholder:'非空描述',class:'col-md-4' %>
+
+                          <div class="tools action-buttons">
+
+                            <% if wordtype.object.id %>
+
+                              <table>
+                                <tr>
+                                  <td>
+                                    <div class="spinner-buttons input-group-btn">
+                                      <a href=<%= up_wordtype_flowdef_path(@flowdef,wordtype.object) %> >
+                                        <button type="button" class="btn spinner-up btn-xs btn-link" style="padding: 0px 4px!important;height: 22px;margin-top: 0px;margin-left: -4px;">
+                                          <i class="icon-caret-up"></i>
+                                        </button>
+                                      </a>
+                                      <a href= <%= down_wordtype_flowdef_path(@flowdef,wordtype.object) %> >
+                                        <button type="button" class="btn spinner-down btn-xs btn-link" style="padding: 0px 4px!important;height: 22px;margin-top: 0px;margin-right: 1px;margin-left: -4px;">
+                                          <i class="icon-caret-down"></i>
+                                        </button>
+                                      </a>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <a href=<%= del_wordtype_flowdef_path(@flowdef,wordtype.object) %> class="red">
+                                      <i class="icon-remove bigger-125"></i>
+                                    </a>
+                                  </td>
+                            <% end %>
+                            </tr>
+                            </table>
+
+                          </div>
+
+                        </div>
+
+
+
+                      <% end %>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+
+
+
+
+          </div>
+          <div class="col-sm-1" style="background: white;"></div>
+<%#= render 'wordtypeform' %>
+          <!-- wordtypeform_end -->
+        </div>
+        <div class=" form-actions" style="background: white;border-top: 0px;">
+          <div class="col-md-offset-2 col-md-10">
+            <button type="submit" name="commit" value="保存" class="btn btn-info" data-disable-with="保存" id="submit">
+              <i class="icon-ok bigger-110"></i>
+              保存
+            </button>
+
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script>
+    $('#validation-form').validate({
+        debug: false,
+        errorElement: 'div',
+        errorClass: 'help-block',
+        focusInvalid: false,
+        rules: {
+            'flowdef[unionsector_id]': {
+                required: true
+            },
+            'flowdef[name]': {
+                required: true
+            }
+        },
+
+        messages: {
+            'flowdef[unionsector_id]': {
+                required: "&nbsp;&nbsp;审批部门不能为空"
+            },
+            'flowdef[name]': {
+                required: "&nbsp;&nbsp;流程名称不能为空"
+            }
+        },
+
+        invalidHandler: function (event, validator) { //display error alert on form submit
+            $('.alert-danger', $('.login-form')).show();
+        },
+
+        highlight: function (e) {
+            $(e).closest('.form-group').removeClass('has-info').addClass('has-error');
+        },
+
+        success: function (e) {
+            $(e).closest('.form-group').removeClass('has-error').addClass('has-info');
+            $(e).remove();
+        }
+    });
+</script>
+<%= render 'layerend' %>

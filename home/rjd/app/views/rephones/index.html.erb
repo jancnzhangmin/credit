@@ -1,0 +1,94 @@
+<%= render 'layerbegin' %>
+
+
+<style>
+    .btn-transparent {
+        background-color: transparent !important;
+        border-color: transparent;
+        color:#6fb3e0;
+    }
+</style>
+
+
+
+<div class="page-content">
+  <div class="page-header">
+    <h1>
+      接收管理短信号码
+    </h1>
+  </div><!-- /.page-header -->
+
+  <div class="row">
+    <div class="col-xs-12">
+      <!-- PAGE CONTENT BEGINS -->
+
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="table-responsive">
+            <table id="sample-table-1" class="table table-striped table-bordered table-hover">
+              <thead>
+              <tr>
+                <th class="text-center">接收号码</th>
+                <th class="text-center">操作</th>
+
+
+
+              </tr>
+              </thead>
+
+              <tbody>
+              <% @rephones.each do |rephone| %>
+                  <tr>
+                    <td>
+                      <%= rephone.phone %>
+                    </td>
+                    <td>
+                      <div class="visible-md visible-lg hidden-sm hidden-xs btn-group" data-turbolinks="false">
+                        <a class="btn btn-xs btn-warning" href=<%= edit_rephone_path(rephone) %>>
+                          <i class="icon-edit bigger-120"></i>
+                          编辑
+                        </a>
+                        <a class="btn btn-xs btn-danger" data-confirm="确定删除?" data-method="delete" href=<%= rephone_path(rephone) %>>
+                          <i class="icon-trash bigger-120"></i>
+                          删除
+                        </a>
+                      </div>
+
+                    </td>
+                  </tr>
+              <% end %>
+
+
+
+
+
+
+
+
+              </tbody>
+            </table>
+          </div><!-- /.table-responsive -->
+
+          <div class="visible-md visible-lg btn-group pull-right" data-turbolinks="false">
+            <a class="btn btn-info" href=<%= new_rephone_path %>>
+              <i class="fa fa-plus"></i>
+              新增号码
+            </a>
+          </div>
+
+        </div><!-- /span -->
+      </div><!-- /row -->
+
+      <div data-turbolinks="false" class="text-center">
+        <%= will_paginate @rephones, renderer: BootstrapPagination::Rails %>
+      </div>
+
+
+
+    </div><!-- /.col -->
+  </div><!-- /.row -->
+</div><!-- /.page-content -->
+
+
+
+<% render 'layerend' %>

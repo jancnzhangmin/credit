@@ -1,0 +1,109 @@
+<div class="row-fluid">
+  <ul id="attachul" class="ace-thumbnails">
+
+
+
+    <li id="addli">
+      <div class="head-img text-center" style="width: 150px;height: 150px;">
+        <i class="fa fa-plus fa-2x" style="margin-top:60px;"></i>
+
+      </div>
+      <input type="file" id="img-upload" style="display: none;" data-remote="false"/>
+
+    </li>
+
+  </ul>
+</div>
+
+
+<script>
+
+    $('.head-img').click(function () {
+        $('#img-upload').click();
+    });
+    $('#img-upload').change(function () {
+        if(this.files.length >0 ) {
+            var formData = new FormData();
+            formData.append("upfile", this.files[0]);
+            formData.append("flowattachment_id", <%= flowattachment_id %>);
+            var request = new XMLHttpRequest();
+
+            request.open("POST", '<%= uploadfile_flows_path %>',true);
+            request.send(formData);
+            request.onreadystatechange = function () {
+                if(request.readyState == 4 && request.status == 200) {
+                    getattachments();
+                }
+            }
+        }
+    });
+
+
+    var getattachments = function() {
+        $.ajax({
+            async: false,    //表示请求是否异步处理
+            type: "get",    //请求类型
+            url: "/flows/get_attachments",//请求的 URL地址
+            dataType: "json",//返回的数据类型
+            data: {
+                flowattachment_id: '<%= flowattachment_id %>'
+            },
+            success: function (data) {
+
+
+                $('#attachul').children().each(function (i,item) {
+                    if(item.id == ""){
+                        try{
+                            item.removeNode(true);
+                        }catch (e) {
+                            item.remove();
+                        }
+                    }
+                });
+
+                $.each(data,function(i,item){
+                    var html = '<li>';
+                    html += '<a href='+item.url+' data-rel="colorbox">';
+                    html += '<img width="150px" src='+ item.imagetype + ' />';
+                    html += '<div class="text">';
+                    html += '<div class="inner">'+ item.attachment_file_name+'</div>';
+                    html += '</div>';
+                    html += '</a>';
+                    html += '<div class="tools tools-bottom">';
+                    html += '<a class="pull-right dela" href="" value='+item.id+' data-remote="true">';
+                    html += '<i class="icon-remove red"></i>';
+                    html += '</a>';
+                    html += '</div>';
+                    html += '</li>';
+                    $('#attachul').prepend(html);
+                });
+                $('.dela').click(function(){
+                    var el = $(this).attr('value');
+                    $.ajax({
+                        async: false,    //表示请求是否异步处理
+                        type: "get",    //请求类型
+                        url: "/flows/del_attachment",//请求的 URL地址
+                        dataType: "json",//返回的数据类型
+                        data: {
+                            attachment_id: el
+                        },
+                        success: function (data) {
+                            getattachments();
+                        },
+                        error: function (data) {
+                            alert(data.result);
+                        }
+                    });
+                });
+            },
+            error: function (data) {
+                alert(data.result);
+            }
+        });
+    };
+
+
+
+    getattachments();
+
+</script>

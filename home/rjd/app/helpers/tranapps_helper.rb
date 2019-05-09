@@ -1,0 +1,2 @@
+module TranappsHelper
+end

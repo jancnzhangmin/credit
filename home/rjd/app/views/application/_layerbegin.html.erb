@@ -1,0 +1,217 @@
+
+
+
+<div class="navbar navbar-default" id="navbar">
+  <script type="text/javascript">
+      try{ace.settings.check('navbar' , 'fixed')}catch(e){}
+
+      $(document).ready(function(){
+          $('#allalert').text(parseInt('<%= Tranapp.where("status = ?",0).count %>') + parseInt('<%= Withdrawapp.where("status = ?",0).count %>'));
+          $('#topalert').text(parseInt('<%= Tranapp.where("status = ?",0).count %>') + parseInt('<%= Withdrawapp.where("status = ?",0).count %>'));
+          $('#toptranapp').text('+' + '<%= Tranapp.where("status = ?",0).count %>');
+          $('#topwithdrawapp').text('+' + '<%= Withdrawapp.where("status = ?",0).count %>');
+          if(parseInt('<%= Tranapp.where("status = ?",0).count %>') > 0){
+              $('#toptranapp').show();
+          }else{
+              $('#toptranapp').hide();
+          }
+          if(parseInt('<%= Withdrawapp.where("status = ?",0).count %>') > 0){
+              $('#topwithdrawapp').show();
+          }else{
+              $('#topwithdrawapp').hide();
+          }
+      });
+  </script>
+
+  <div class="navbar-container" id="navbar-container">
+    <div class="navbar-header pull-left">
+      <a href="#" class="navbar-brand">
+        <small>
+          <i class="fa fa-bars"></i>
+          RJD
+        </small>
+      </a><!-- /.brand -->
+    </div><!-- /.navbar-header -->
+
+    <div class="navbar-header pull-right" role="navigation">
+      <ul class="nav ace-nav">
+
+        <li class="red">
+          <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+            <i class="icon-bell-alt icon-animated-bell"></i>
+            <span class="badge badge-important" id="allalert">0</span>
+          </a>
+
+          <ul class="pull-right dropdown-navbar  dropdown-menu dropdown-caret dropdown-close">
+            <li class="dropdown-header">
+              <i class="icon-warning-sign"></i>
+              <span id="topalert"></span>条通知
+            </li>
+
+            <li>
+              <a href=<%= tranapps_path %>>
+                <div class="clearfix">
+											<span class="pull-left">
+												<i class="btn btn-xs no-hover btn-info fa fa-user-plus"></i>
+												交易账号申请
+											</span>
+                  <span id="toptranapp" class="pull-right badge badge-danger">+8</span>
+                </div>
+              </a>
+            </li>
+
+            <li>
+              <a href=<%= withdrawapps_path %>>
+                <div class="clearfix">
+											<span class="pull-left">
+												<i class="btn btn-xs no-hover btn-info fa fa-credit-card"></i>
+												提现申请
+											</span>
+                  <span id="topwithdrawapp" class="pull-right badge badge-danger">+11</span>
+                </div>
+              </a>
+            </li>
+
+          </ul>
+        </li>
+
+        <li class="light-blue">
+          <a data-toggle="dropdown" href="#" class="dropdown-toggle">
+
+								<span class="user-info">
+									<small>欢迎光临</small>
+
+								</span>
+
+            <i class="icon-caret-down"></i>
+          </a>
+
+          <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+            <li data-turbolinks="false">
+              <a href="#">
+                <i class="icon-cog"></i>
+                修改密码
+              </a>
+            </li>
+
+            <li class="divider"></li>
+
+            <li>
+              <a href="#">
+                <i class="icon-off"></i>
+                退出
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul><!-- /.ace-nav -->
+    </div><!-- /.navbar-header -->
+  </div><!-- /.container -->
+</div>
+
+<div class="main-container" id="main-container">
+  <script type="text/javascript">
+      try{ace.settings.check('main-container' , 'fixed')}catch(e){}
+  </script>
+
+  <div class="main-container-inner">
+    <a class="menu-toggler" id="menu-toggler" href="#">
+      <span class="menu-text"></span>
+    </a>
+
+    <div class="sidebar" id="sidebar">
+      <script type="text/javascript">
+          try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
+      </script>
+
+      <% url = request.url %>
+
+      <ul class="nav nav-list">
+        <li class="active">
+          <a href="#">
+            <i class="icon-dashboard"></i>
+            <span class="menu-text"> 控制台 </span>
+          </a>
+        </li>
+            <li>
+        <a href="#" class="dropdown-toggle">
+          <i class="icon-cog"></i>
+          <span class="menu-text"> 系统 </span>
+
+          <b class="arrow icon-angle-down"></b>
+        </a>
+
+        <ul class="submenu">
+          <li data-turbolinks="false">
+            <a href=<%= bankdefs_path %>>
+              <i class="icon-double-angle-right"></i>
+              管理员
+            </a>
+          </li>
+          <li data-turbolinks="false">
+            <a href=<%= rephones_path %>>
+              <i class="icon-double-angle-right"></i>
+              接收短信号码
+            </a>
+          </li>
+          <li data-turbolinks="false">
+            <a href=<%= bankdefs_path %>>
+              <i class="icon-double-angle-right"></i>
+              开户银行
+            </a>
+          </li>
+
+        </ul>
+        </li>
+        <li>
+          <a href="#" class="dropdown-toggle">
+            <i class="icon-user"></i>
+            <span class="menu-text"> 用户 </span>
+            <b class="arrow icon-angle-down"></b>
+          </a>
+
+          <ul class="submenu">
+            <li data-turbolinks="false">
+              <a href=<%= users_path %>>
+                <i class="icon-double-angle-right"></i>
+                用户
+              </a>
+            </li>
+            <li data-turbolinks="false">
+              <a href=<%= tranapps_path %>>
+                <i class="icon-double-angle-right"></i>
+                交易账号申请
+                <% if Tranapp.where('status = ?',0).count != 0 %>
+                <span id="lefttranapp" class="badge badge-danger "><%= Tranapp.where('status = ?',0).count %></span>
+                    <% end %>
+              </a>
+            </li>
+            <li data-turbolinks="false">
+              <a href=<%= withdrawapps_path %>>
+                <i class="icon-double-angle-right"></i>
+                提现申请
+                <% if Withdrawapp.where('status = ?',0).count != 0 %>
+                <span id="leftwithdrawapp" class="badge badge-danger "><%= Withdrawapp.where('status = ?',0).count %></span>
+                <% end %>
+              </a>
+            </li>
+          </ul>
+        </li>
+
+
+
+
+
+      </ul><!-- /.nav-list -->
+
+      <div class="sidebar-collapse" id="sidebar-collapse">
+        <i class="icon-double-angle-left" data-icon1="icon-double-angle-left" data-icon2="icon-double-angle-right"></i>
+      </div>
+
+      <script type="text/javascript">
+          try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
+      </script>
+    </div>
+
+    <div class="main-content">
+

@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  flowdetail_id: 
+  val: MyText
+  isnull: 1
+  isnullsummary: MyString
+
+two:
+  flowdetail_id: 
+  val: MyText
+  isnull: 1
+  isnullsummary: MyString

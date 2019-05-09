@@ -1,0 +1,164 @@
+<script>
+  $(document).ready(function(){
+      jQuery.validator.addMethod("login",function(value,element,param){
+          var pattern = /^([0-9]*)+$/;
+          return this.optional(element) || (!pattern.test(value));
+      },"&nbsp;&nbsp;账号不能为纯数字");
+      $('#validation-form').validate({
+          errorElement: 'div',
+          errorClass: 'help-block',
+          focusInvalid: false,
+          rules: {
+              'rephone[phone]': {
+                  required: true
+              }
+          },
+          messages: {
+              'rephone[phone]': {
+                  required: "&nbsp;&nbsp;手机号码不能为空"
+              }
+          },
+
+          invalidHandler: function (event, validator) { //display error alert on form submit
+              $('.alert-danger', $('.login-form')).show();
+          },
+
+          highlight: function (e) {
+              $(e).closest('.form-group').removeClass('has-info').addClass('has-error');
+          },
+
+          success: function (e) {
+              $(e).closest('.form-group').removeClass('has-error').addClass('has-info');
+              $(e).remove();
+          }
+
+      });
+
+      $('#commit').click(function(){
+          $('#status').val(1);
+      });
+      $('#cancel').click(function(){
+          $('#status').val(-1);
+      });
+
+  });
+</script>
+
+
+
+
+<div class="row">
+  <div class="col-xs-12">
+    <!-- PAGE CONTENT BEGINS -->
+
+    <%= form_with(model: withdrawapp,local:true,id:'validation-form',:html => {:class=>'form-horizontal m-t',:multipart => true}) do |f| %>
+        <div class="form-group">
+          <label class="control-label col-xs-12 col-sm-3 no-padding-right"> 姓名 </label>
+          <div class="col-xs-12 col-sm-9">
+            <div class="clearfix">
+              <input type="text" class="col-xs-12 col-sm-5" readonly=true value=<%=@withdrawapp.user.name %>>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label col-xs-12 col-sm-3 no-padding-right"> 账号 </label>
+          <div class="col-xs-12 col-sm-9">
+            <div class="clearfix">
+              <input type="text" class="col-xs-12 col-sm-5" readonly=true value=<%=@withdrawapp.user.login %>>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label col-xs-12 col-sm-3 no-padding-right"> 交易账号 </label>
+          <div class="col-xs-12 col-sm-9">
+            <div class="clearfix">
+              <input type="text" class="col-xs-12 col-sm-5" readonly=true value=<%=@withdrawapp.user.tranaccount %>>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label col-xs-12 col-sm-3 no-padding-right"> 交易密码 </label>
+          <div class="col-xs-12 col-sm-9">
+            <div class="clearfix">
+              <input type="text" class="col-xs-12 col-sm-5" readonly=true value=<%=@withdrawapp.user.tranpassword %>>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label col-xs-12 col-sm-3 no-padding-right"> 提现金额 </label>
+          <div class="col-xs-12 col-sm-9">
+            <div class="clearfix">
+              <%= f.text_field :amount,class:"col-xs-12 col-sm-5",'readonly':true %>
+            </div>
+          </div>
+        </div>
+
+        <div class="hr hr32 hr-dotted"></div>
+        <div class="form-group">
+          <label class="control-label col-xs-12 col-sm-3 no-padding-right"> 持卡人姓名 </label>
+          <div class="col-xs-12 col-sm-9">
+            <div class="clearfix">
+              <input type="text" class="col-xs-12 col-sm-5" readonly=true value=<%=Bankcard.find(@withdrawapp.tobank).bankname %>>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label col-xs-12 col-sm-3 no-padding-right"> 开户银行 </label>
+          <div class="col-xs-12 col-sm-9">
+            <div class="clearfix">
+              <input type="text" class="col-xs-12 col-sm-5" readonly=true value=<%=Bankcard.find(@withdrawapp.tobank).bankdef.bank %>>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label col-xs-12 col-sm-3 no-padding-right"> 开户行地址 </label>
+          <div class="col-xs-12 col-sm-9">
+            <div class="clearfix">
+              <input type="text" class="col-xs-12 col-sm-5" readonly=true value=<%=Bankcard.find(@withdrawapp.tobank).bankaddress %>>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label col-xs-12 col-sm-3 no-padding-right"> 银行账号 </label>
+          <div class="col-xs-12 col-sm-9">
+            <div class="clearfix">
+              <input type="text" class="col-xs-12 col-sm-5" readonly=true value=<%=Bankcard.find(@withdrawapp.tobank).bankaccount %>>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label col-xs-12 col-sm-3 no-padding-right"> 原因 </label>
+          <div class="col-xs-12 col-sm-9">
+            <div class="clearfix">
+              <%= f.text_field :message,class:"col-xs-12 col-sm-5",placeholder:'通过或拒绝的原因' %>
+              <%= f.hidden_field :status,id:'status',class:"col-xs-12 col-sm-5",placeholder:'通过或拒绝的原因' %>
+            </div>
+          </div>
+        </div>
+
+        <div class="clearfix form-actions">
+          <div class="col-md-offset-3 col-md-4">
+            <button type="submit" id="commit" value="保存" class="btn btn-success" data-disable-with="保存">
+              <i class="icon-ok bigger-110"></i>
+              已处理
+            </button>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button type="submit" id="cancel" value="保存" class="btn btn-danger" data-disable-with="拒绝">
+              <i class="icon-remove bigger-110"></i>
+              拒绝
+            </button>
+
+          </div>
+        </div>
+
+    <% end %>
+  </div><!-- /.col -->
+</div><!-- /.row -->

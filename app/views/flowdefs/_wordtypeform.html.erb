@@ -1,0 +1,68 @@
+
+<div class="col-sm-1"></div>
+<div class="col-sm-10" style="background: white;">
+
+  <div>
+    <div class="widget-box transparent">
+      <div class="widget-header widget-header-small">
+        <h4 class="blue smaller">
+          <i class="fa fa-bars orange"></i>
+          字段
+        </h4>
+
+        <div class="widget-toolbar action-buttons">
+          <a href="#" data-action="reload">
+            <i class="icon-refresh blue"></i>
+          </a>
+
+          &nbsp;
+          <a href="#" class="pink">
+            <i class="icon-trash"></i>
+          </a>
+        </div>
+      </div>
+
+      <div class="widget-body" style="background: white;">
+        <div class="widget-main padding-8">
+          <div id="profile-feed-1" class="profile-feed">
+
+
+
+
+
+
+
+
+
+
+            <div class="profile-activity clearfix">
+
+              <%= fields_for :wordtypes do |wordtype| %>
+                <%= wordtype.select :wordtypedef_id,Wordtypedef.all.map{|n| [n.wordtype,n.id]}, {include_blank: '字段类型'},{class:'col-md-2',style:'height:28px;'} %>
+                <%= wordtype.text_field :name,class:'col-md-2' %>
+                <div class="checkbox col-md-1 text-right" style="padding-top: 0px;">
+                  <label>
+                    <%= wordtype.check_box :isnull,class:"ace" %>
+                    <span class="lbl"> 非空</span>
+                  </label>
+                </div>
+                <%= wordtype.text_field :nullsummary,placeholder:'非空描述',class:'col-md-4' %>
+              <% end %>
+
+            </div>
+
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+</div>
+<div class="col-sm-1" style="background: white;"></div>
